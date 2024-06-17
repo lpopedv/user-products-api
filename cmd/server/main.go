@@ -7,13 +7,29 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/jwtauth"
 	"github.com/lpopedv/user-products-api/configs"
-	"github.com/lpopedv/user-products-api/infra/database"
-	"github.com/lpopedv/user-products-api/infra/webserver/handlers"
 	"github.com/lpopedv/user-products-api/internal/entity"
+	"github.com/lpopedv/user-products-api/internal/infra/database"
+	"github.com/lpopedv/user-products-api/internal/infra/webserver/handlers"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	_ "github.com/lpopedv/user-products-api/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// @title           Products API
+// @version         1.0
+// @description     Product API with authentication
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8000
+// @BasePath  /
+
+// @securityDefinitions.apiKey ApiKeyAuth
+// @in   header
+// @name Authorization
 func main() {
 	configs, err := configs.LoadConfig(".")
 
@@ -51,8 +67,9 @@ func main() {
 	})
 
 	r.Post("/users", userHandler.Create)
-
 	r.Post("/sessions", userHandler.Sessions)
+
+  r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	http.ListenAndServe(":8000", r)
 }

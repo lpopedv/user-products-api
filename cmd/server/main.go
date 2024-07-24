@@ -69,7 +69,7 @@ func main() {
 	r.Post("/users", userHandler.Create)
 	r.Post("/sessions", userHandler.Sessions)
 
-  r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	http.ListenAndServe(":8000", r)
 }

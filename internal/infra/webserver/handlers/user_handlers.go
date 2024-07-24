@@ -27,7 +27,7 @@ func NewUserHandler(userDB database.UserInterface, jwt *jwtauth.JWTAuth, jwtExpi
 		Jwt:           jwt,
 		JwtExpiriesIn: jwtExpiresIn,
 	}
-  
+
 }
 
 // Create user godoc

@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: user_products_postgres_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+      POSTGRES_DB: user_products
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "root"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user_products
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: root
+      DB_PASSWORD: toor
+      DB_NAME: user_products
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_user
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    volumes:
+      - ./pgadmin-config.json:/pgadmin4/servers.json
+    depends_on:
+      - postgres

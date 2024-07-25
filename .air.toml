@@ -1,0 +1,23 @@
+# Config file for Air (hot reloading)
+
+[build]
+  # Command to build the app
+  cmd = "go build -o tmp/user_products main.go"
+
+  # Binary to watch
+  bin = "tmp/user_products"
+
+  # Working directory
+  dir = "."
+
+  # Patterns to watch
+  include_ext = ["go"]
+
+  # Exclude files
+  exclude_dir = ["vendor"]
+
+  # Command to run after build
+  run_after_build = "chmod +x tmp/user_products"
+
+[log]
+  level = "debug"
